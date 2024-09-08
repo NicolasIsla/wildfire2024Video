@@ -14,10 +14,10 @@ def train_model(args):
 
     # Define the checkpoint callback
     checkpoint_callback = ModelCheckpoint(
-        monitor="val_acc", 
+        monitor="val_f1", 
         mode="max", 
         save_top_k=4, 
-        filename='{epoch:02d}-{val_acc:.2f}',  # Custom filename with epoch and val_acc
+        filename='{epoch:02d}-{val_f1:.2f}',  # Custom filename with epoch and val_acc
     )
 
     # Initialize the WandbLogger
