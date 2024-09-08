@@ -7,7 +7,7 @@ import os
 from torch.utils.data import Dataset
 import torch.nn as nn
 import torch.nn.functional as F
-from torchmetrics import Accuracy, Precision, Recall
+from torchmetrics import Accuracy, Precision, Recall, F1
 import torchvision.models as models
 import pytorch_lightning as pl
 
@@ -257,6 +257,9 @@ class FireClassifier(pl.LightningModule):
         self.val_precision = Precision(task="binary")
         self.train_recall = Recall(task="binary")
         self.val_recall = Recall(task="binary")
+        # f1
+        self.train_f1 = F1(task="binary")
+        self.val_f1 = F1(task="binary")
 
     def forward(self, x):
         # x shape: [batch_size, seq_length, channels, height, width]
@@ -287,10 +290,14 @@ class FireClassifier(pl.LightningModule):
         acc = self.train_accuracy(torch.sigmoid(y_hat), y.int())
         precision = self.train_precision(torch.sigmoid(y_hat), y.int())
         recall = self.train_recall(torch.sigmoid(y_hat), y.int())
+        # f1
+        f1 = self.train_f1(torch.sigmoid(y_hat), y.int())
         self.log("train_loss", loss)
         self.log("train_acc", acc)
         self.log("train_precision", precision)
         self.log("train_recall", recall)
+        self.log("train_f1", f1)
+
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -302,10 +309,15 @@ class FireClassifier(pl.LightningModule):
         acc = self.val_accuracy(torch.sigmoid(y_hat), y.int())
         precision = self.val_precision(torch.sigmoid(y_hat), y.int())
         recall = self.val_recall(torch.sigmoid(y_hat), y.int())
+        # f1
+        f1 = self.val_f1(torch.sigmoid(y_hat), y.int())
+
         self.log("val_loss", loss)
         self.log("val_acc", acc)
         self.log("val_precision", precision)
         self.log("val_recall", recall)
+        self.log("val_f1", f1)
+
         return loss
 
     def configure_optimizers(self):
