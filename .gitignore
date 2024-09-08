@@ -12,6 +12,8 @@ build/
 
 # Data
 data/
+minidata/
+data.zip
 
 # Models
 models/saved_models/

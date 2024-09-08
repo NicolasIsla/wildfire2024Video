@@ -1,0 +1,5 @@
+gdown
+ultralytics
+gpustat
+wandb
+scikit-learn
