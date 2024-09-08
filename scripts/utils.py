@@ -242,7 +242,7 @@ class FireClassifier(pl.LightningModule):
         # LSTM que procesará las características extraídas.
         # Número de características de la salida del último bloque conv de ResNet.
         num_features = resnet.fc.in_features
-        self.lstm = nn.LSTM(input_size=32768, hidden_size=256, batch_first=True, num_layers=1)
+        self.lstm = nn.LSTM(input_size=32768, hidden_size=256, batch_first=True, num_layers=3)
 
         # Capa de clasificación.
         self.classifier = nn.Linear(256, 1)  # Salida binaria

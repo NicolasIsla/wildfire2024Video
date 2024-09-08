@@ -16,7 +16,7 @@ def train_model(args):
     checkpoint_callback = ModelCheckpoint(
         monitor="val_acc", 
         mode="max", 
-        save_top_k=1, 
+        save_top_k=4, 
         filename='{epoch:02d}-{val_acc:.2f}',  # Custom filename with epoch and val_acc
     )
 
