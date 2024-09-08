@@ -27,8 +27,7 @@ def train_model(args):
     trainer = pl.Trainer(
         max_epochs=args.epochs,
         callbacks=[checkpoint_callback],
-        logger=wandb_logger,
-        gpus=1 if torch.cuda.is_available() else 0
+        logger=wandb_logger
     )
 
     # Train the model
