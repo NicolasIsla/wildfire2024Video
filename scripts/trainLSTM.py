@@ -22,7 +22,7 @@ def train_model(args):
     )
     early_stopping_callback = EarlyStopping(
         monitor="val_loss", 
-        mode="max", 
+        mode="min", 
         patience=10,  # Number of epochs with no improvement after which training will be stopped
         verbose=True
     )
