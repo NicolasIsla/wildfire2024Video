@@ -21,7 +21,7 @@ def train_model(args):
         filename='{epoch:02d}-{val_f1:.2f}',  # Custom filename with epoch and val_acc
     )
     early_stopping_callback = EarlyStopping(
-        monitor="val_f1", 
+        monitor="val_loss", 
         mode="max", 
         patience=5,  # Number of epochs with no improvement after which training will be stopped
         verbose=True
