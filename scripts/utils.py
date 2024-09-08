@@ -7,7 +7,7 @@ import os
 from torch.utils.data import Dataset
 import torch.nn as nn
 import torch.nn.functional as F
-from torchmetrics import Accuracy, Precision, Recall, F1
+from torchmetrics import Accuracy, Precision, Recall, F1Score
 import torchvision.models as models
 import pytorch_lightning as pl
 
@@ -258,8 +258,8 @@ class FireClassifier(pl.LightningModule):
         self.train_recall = Recall(task="binary")
         self.val_recall = Recall(task="binary")
         # f1
-        self.train_f1 = F1(task="binary")
-        self.val_f1 = F1(task="binary")
+        self.train_f1 = F1Score(task="binary")
+        self.val_f1 = F1Score(task="binary")
 
     def forward(self, x):
         # x shape: [batch_size, seq_length, channels, height, width]
