@@ -20,12 +20,12 @@ def train_model(args):
         save_top_k=4, 
         filename='{epoch:02d}-{val_f1:.2f}',  # Custom filename with epoch and val_acc
     )
-    early_stopping_callback = EarlyStopping(
-        monitor="val_loss", 
-        mode="min", 
-        patience=15,  # Number of epochs with no improvement after which training will be stopped
-        verbose=True
-    )
+    # early_stopping_callback = EarlyStopping(
+    #     monitor="val_loss", 
+    #     mode="min", 
+    #     patience=15,  # Number of epochs with no improvement after which training will be stopped
+    #     verbose=True
+    # )
 
     # Initialize the WandbLogger
     wandb_logger = WandbLogger(project='fire_detection_project')
@@ -33,7 +33,7 @@ def train_model(args):
     # Initialize the Trainer
     trainer = pl.Trainer(
         max_epochs=args.epochs,
-        callbacks=[checkpoint_callback, early_stopping_callback],
+        callbacks=[checkpoint_callback],
         logger=wandb_logger
     )
 
