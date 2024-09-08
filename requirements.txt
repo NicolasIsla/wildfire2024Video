@@ -3,3 +3,4 @@ ultralytics
 gpustat
 wandb
 scikit-learn
+pytorch-lightning
