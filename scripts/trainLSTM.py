@@ -23,7 +23,7 @@ def train_model(args):
     )
 
     # Initialize the WandbLogger
-    wandb_logger = WandbLogger(project='fire_detection_project')
+    wandb_logger = WandbLogger(project='lstm-efficentnet', log_model=True)
 
     # Initialize the Trainer
     trainer = pl.Trainer(
