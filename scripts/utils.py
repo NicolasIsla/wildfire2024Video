@@ -228,21 +228,24 @@ class FireDataModule(pl.LightningDataModule):
         return DataLoader(self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers)
     
 
+from timm import create_model
+
 class FireClassifier(pl.LightningModule):
-    def __init__(self, learning_rate=1e-4):
+    def __init__(self, lstm_layers=4, learning_rate=1e-4):
         super(FireClassifier, self).__init__()
         self.save_hyperparameters()
 
-        # Usamos una ResNet como extractor de características.
-        # Pretrained sobre ImageNet, usualmente se carga con 3 canales.
-        resnet = models.resnet50(pretrained=True)
-        # Removemos la capa final para usarla como extractor de características.
-        self.feature_extractor = nn.Sequential(*list(resnet.children())[:-2])
+        # Usamos EfficientNetB3 como extractor de características.
+        efficientnet = create_model('efficientnet_b3', pretrained=True)
+
+        # Removemos la capa final de clasificación para usarla como extractor de características.
+        self.feature_extractor = nn.Sequential(*list(efficientnet.children())[:-2])
+
+        # Número de características de salida de EfficientNetB3.
+        num_features = efficientnet.classifier.in_features  # Cambiado según EfficientNetB3
 
         # LSTM que procesará las características extraídas.
-        # Número de características de la salida del último bloque conv de ResNet.
-        num_features = resnet.fc.in_features
-        self.lstm = nn.LSTM(input_size=32768, hidden_size=256, batch_first=True, num_layers=4)
+        self.lstm = nn.LSTM(input_size=num_features * 4 * 4, hidden_size=256, batch_first=True, num_layers=lstm_layers)
 
         # Capa de clasificación.
         self.classifier = nn.Linear(256, 1)  # Salida binaria
