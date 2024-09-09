@@ -5,6 +5,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from utils import FireDataModule, FireClassifier
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+
 # Entrenar el modelo
 def train_model(args):
     # Initialize the DataModule
@@ -20,12 +21,6 @@ def train_model(args):
         save_top_k=4, 
         filename='{epoch:02d}-{val_f1:.2f}',  # Custom filename with epoch and val_acc
     )
-    # early_stopping_callback = EarlyStopping(
-    #     monitor="val_loss", 
-    #     mode="min", 
-    #     patience=15,  # Number of epochs with no improvement after which training will be stopped
-    #     verbose=True
-    # )
 
     # Initialize the WandbLogger
     wandb_logger = WandbLogger(project='fire_detection_project')
@@ -40,6 +35,13 @@ def train_model(args):
     # Train the model
     trainer.fit(model, data_module)
 
+    # Once training is complete, run testing with the best checkpoint
+    best_model_path = checkpoint_callback.best_model_path
+    print(f"Best model saved at: {best_model_path}")
+
+    # Load the best checkpoint and test the model
+    trainer.test(ckpt_path=best_model_path, datamodule=data_module)
+
 # Función principal con argparse
 def main():
     parser = argparse.ArgumentParser(description="Entrenamiento de clasificador de incendios")
@@ -48,7 +50,6 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Tasa de aprendizaje')
     parser.add_argument('--epochs', type=int, default=50, help='Número de épocas de entrenamiento')
     parser.add_argument('--batch_size', type=int, default=32, help='Tamaño del lote')
-    # lstm laryer
     parser.add_argument('--lstm_layers', type=int, default=2, help='Número de capas LSTM')
 
     args = parser.parse_args()
