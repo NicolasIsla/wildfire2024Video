@@ -11,7 +11,7 @@ def train_model(args):
     data_module = FireDataModule(data_dir=args.data_dir, batch_size=args.batch_size)
 
     # Initialize the model
-    model = FireClassifier(learning_rate=args.learning_rate)
+    model = FireClassifier(learning_rate=args.learning_rate, lstm_layers=args.lstm_layers)
 
     # Define the checkpoint callback
     checkpoint_callback = ModelCheckpoint(
@@ -48,6 +48,8 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=1e-4, help='Tasa de aprendizaje')
     parser.add_argument('--epochs', type=int, default=50, help='Número de épocas de entrenamiento')
     parser.add_argument('--batch_size', type=int, default=32, help='Tamaño del lote')
+    # lstm laryer
+    parser.add_argument('--lstm_layers', type=int, default=2, help='Número de capas LSTM')
 
     args = parser.parse_args()
     train_model(args)
