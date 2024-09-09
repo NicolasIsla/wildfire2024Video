@@ -4,3 +4,4 @@ gpustat
 wandb
 scikit-learn
 pytorch-lightning
+timm
