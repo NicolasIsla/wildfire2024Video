@@ -35,12 +35,12 @@ def train_model(args):
     # Train the model
     trainer.fit(model, data_module)
 
-    # Once training is complete, run testing with the best checkpoint
-    best_model_path = checkpoint_callback.best_model_path
-    print(f"Best model saved at: {best_model_path}")
+    # # Once training is complete, run testing with the best checkpoint
+    # best_model_path = checkpoint_callback.best_model_path
+    # print(f"Best model saved at: {best_model_path}")
 
-    # Load the best checkpoint and test the model
-    trainer.test(ckpt_path=best_model_path, datamodule=data_module)
+    # # Load the best checkpoint and test the model
+    # trainer.test(ckpt_path=best_model_path, datamodule=data_module)
 
 # Función principal con argparse
 def main():
