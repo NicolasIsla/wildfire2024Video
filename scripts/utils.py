@@ -326,6 +326,25 @@ class FireClassifier(pl.LightningModule):
         self.log("val_f1", f1)
 
         return loss
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x).squeeze()
+
+        # Aplicar la pérdida sobre todos los frames
+        loss = F.binary_cross_entropy_with_logits(y_hat, y.float())
+        acc = self.val_accuracy(torch.sigmoid(y_hat), y.int())
+        precision = self.val_precision(torch.sigmoid(y_hat), y.int())
+        recall = self.val_recall(torch.sigmoid(y_hat), y.int())
+        # f1
+        f1 = self.val_f1(torch.sigmoid(y_hat), y.int())
+
+        self.log("test_loss", loss)
+        self.log("test_acc", acc)
+        self.log("test_precision", precision)
+        self.log("test_recall", recall)
+        self.log("test_f1", f1)
+
+        return loss
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.hparams['learning_rate'], weight_decay=1e-4)
