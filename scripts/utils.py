@@ -217,6 +217,10 @@ class FireDataModule(pl.LightningDataModule):
         self.val_dataset = FireSeriesDataset(
             os.path.join(self.data_dir, "val"), self.img_size, transform=self.val_transform
         )
+
+        self.test_dataset = FireSeriesDataset(
+            os.path.join(self.data_dir, "test"), self.img_size, transform=self.val_transform
+        )
         
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers)
